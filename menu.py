@@ -6,14 +6,12 @@ https://github.com/uw-continuum/python-320-assignment-02-smichalove
 '''
 import sys
 import main
-import user_status
-import users
+
 from datetime import datetime
 import logging
-import sys
+
 import main
-import user_status
-import users
+
 import logger
 from loguru import logger
 
@@ -96,15 +94,17 @@ def search_user():
     user_id = input('Enter user ID to search: ')
     logger.debug(f"menu.py search_users {user_id}")
     result = main.search_user(user_id, user_collection)
+    print(result)
     logger.debug(f"result::{result}")
+    print(result)
     if result is None:
         print("ERROR: User does not exist")
     else:
        
-        print(f"User ID: {result['user_id']}")
-        print(f"Email: {result['email']}")
-        print(f"Name: {result['user_name']}")
-        print(f"Last name: {result['user_last_name']}")
+        print(f"User ID: {result[0]}")
+        print(f"Email: {result[1]}")
+        print(f"Name: {result[2]}")
+        print(f"Last name: {result[3]}")
 
 
 def delete_user():
@@ -163,15 +163,15 @@ def search_status():
     try:
         status_id = input('Enter status ID to search: ')
         result = main.search_status(status_id,status_collection)
-       
+        print(result)
         if result is None:
             print("ERROR: Status does not exist")
  
         else:
             
-            print(f"User ID: {result['user_id']}")
-            print(f"Status ID: {result['status_id']}")
-            print(f"Status text: {result['status_text']}")
+            print(f"User ID: {result[0]}")
+            print(f"Status ID: {result[1]}")
+            print(f"Status text: {result[2]}")
            
     except AttributeError:
         logger.error(f"AttributeError:::: {status_id}")

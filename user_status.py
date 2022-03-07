@@ -15,28 +15,11 @@ from hashlib import new
 from msilib.schema import Error
 from dataclasses import dataclass
 
-from loguru import logger
-import logging
+
+
 from datetime import datetime
 import sys
-date_log = datetime.now().strftime('log_%m_%d-%Y.log')
-logger.add(sys.stderr, level="DEBUG")
-logger.add(sys.stderr, level="ERROR")
-logger.add(sys.stderr, format="{message}",  level="ERROR")
-logger.add(sys.stderr, level="WARNING")
-logger.add(date_log, level="ERROR")
-logger.add(f"{date_log}", encoding="utf8")
-logger.debug(f"logging to {date_log}" )
-date = datetime.now().strftime('log_%m_%d-%Y.log')
-logger.add(sys.stderr, level="DEBUG")
 
-logger.add(sys.stdout, colorize=True, format="<white>{time}</white> <level>-->{message}<---</level>")
-
-#handler.setLevel(logging.DEBUG)
-
-
-logger.add(date_log, backtrace=True, diagnose=True)
-logger.add(date_log, level="ERROR")
 
 class MongoDBConnection():
     '''
@@ -164,15 +147,19 @@ class UserStatusCollection():
         # logger.debug(f"{status_id}delete_status FOUND")
         # return True
         try:
-            a_status = {'status_id' : status_id}
+            
+            a_status = {"_id": status_id }
+            
             result = self.statuscol.find_one(a_status)
             if result is None:
                 return False
             self.statuscol.delete_one(a_status)
+
             return True
         except AttributeError as err:
             print(f"{err}")
             return False
+        
 
 
     def search_status(self, status_id):
@@ -188,13 +175,13 @@ class UserStatusCollection():
         #     return UserStatus(None, None, None)
         # logger.debug(f"{status_id} ::  {self.database[status_id]} found")
         # return self.database[status_id]
-        a_status = {'status_id' : status_id}
+        a_status = {'_id' : status_id}
         result = self.statuscol.find_one(a_status,{"_id":0})
         try:
             if result is None:
                 return None
-            self.statuscol.delete_one(a_status)
+            
             return result
-        except AttributeError as err:
-            print(f"{err}")
+        except TypeError as err:
+            print(f"...............{err}")
             return False

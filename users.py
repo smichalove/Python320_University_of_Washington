@@ -167,8 +167,14 @@ class UserCollection():
         # del self.database[user_id]
         # return True
         try:
+            myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+            mydb = myclient["StatusUpdates"]
+            self.statuscol = mydb["StatusUpdates"]        
+        
             a_user = {'user_id' : user_id}
-            result = self.usercol.find_one({"user_id": user_id})
+            results = self.statuscol.delete_many({"user_id": user_id})
+            result = self.usercol.find_one({"_id": user_id})
+           
             if result is None:
                 return False
             self.usercol.delete_one(a_user)
@@ -183,7 +189,7 @@ class UserCollection():
         '''
         Searches for user data
         '''
-        a_user = {'user_id' : user_id,}
+        a_user = {'_id' : user_id}
         result = self.usercol.find_one(a_user,{"_id":0})
 
 
